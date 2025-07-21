@@ -13,7 +13,8 @@ import { CommonModule } from '@angular/common';
 })
 export class DashboardComponent implements OnInit {
   dashboardData: any;
-
+  totalFarms: number = 0;
+  totalArea: number = 0;
   cropChart: ChartData<'pie', number[], string> = { labels: [], datasets: [] };
   stateChart: ChartData<'pie', number[], string> = { labels: [], datasets: [] };
   landUseChart: ChartData<'pie', number[], string> = { labels: [], datasets: [] };
@@ -25,7 +26,8 @@ export class DashboardComponent implements OnInit {
   ngOnInit(): void {
     this.http.get('http://localhost:7001/api/dashboard').subscribe((data: any) => {
       this.dashboardData = data;
-
+      this.totalFarms = data.total_farms;
+      this.totalArea = data.total_area;
       this.cropChart = {
         labels: Object.keys(data.by_crop),
         datasets: [{ data: Object.values(data.by_crop) }]
