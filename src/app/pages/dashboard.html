@@ -1,1 +1,26 @@
-<p>dashboard works!</p>
+<div class="chart-grid">
+  <section>
+    <h5>Por Cultura</h5>
+    <canvas baseChart [data]="cropChart" [type]="'pie'" [options]="{ responsive: true }"></canvas>
+  </section>
+
+  <section>
+    <h5>Por Estado</h5>
+    <canvas baseChart [data]="stateChart" [type]="'pie'" [options]="{ responsive: true }"></canvas>
+  </section>
+
+  <section>
+    <h5>Uso do Solo</h5>
+    <canvas baseChart [data]="landUseChart" [type]="'pie'" [options]="{ responsive: true }"></canvas>
+  </section>
+
+  <section>
+    <h5>Tipo de Documento</h5>
+    <canvas baseChart [data]="documentChart" [type]="'pie'" [options]="{ responsive: true }"></canvas>
+  </section>
+
+  <section *ngFor="let seasonChart of cropSeasonCharts">
+    <h5>Culturas por Safra - {{ seasonChart.season }}</h5>
+    <canvas baseChart [data]="seasonChart.chart" [type]="'pie'" [options]="{ responsive: true }"></canvas>
+  </section>
+</div>

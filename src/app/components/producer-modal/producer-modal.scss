@@ -1,0 +1,55 @@
+.modal-body {
+  display: flex;
+  flex-direction: column;
+}
+
+.section {
+    margin-top: 1rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.farm-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.farm-card-container {
+  padding: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.farm-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.farm-fields-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.crop-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.crop-row {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  margin-top: 1rem;
+}
+
+.half-width {
+  flex: 1;
+}
+
+.modal-footer {
+  margin-top: 2rem;
+}

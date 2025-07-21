@@ -1,0 +1,97 @@
+<h2 mat-dialog-title>{{ isEditMode ? 'Editar Produtor' : 'Cadastrar Novo Produtor' }}</h2>
+
+<div mat-dialog-content [formGroup]="producerForm" class="modal-body">
+
+  <div class="section">
+    <mat-form-field appearance="fill" class="full-width">
+      <mat-label>Nome</mat-label>
+      <input matInput formControlName="name" />
+    </mat-form-field>
+
+    <mat-form-field appearance="fill" class="full-width">
+      <mat-label>Documento</mat-label>
+      <input matInput formControlName="document" maxlength="18" />
+    </mat-form-field>
+  </div>
+
+  <div formArrayName="farms" *ngIf="farms.length > 0">
+    <div *ngFor="let farm of farms.controls; let i = index" [formGroupName]="i" class="farm-card">
+      <mat-card class="mat-elevation-z3 farm-card-container">
+        <div class="farm-card-header">
+          <mat-card-title>Fazenda {{ i + 1 }}</mat-card-title>
+          <button mat-icon-button color="warn" (click)="removeFarm(i)">
+            <mat-icon>delete</mat-icon>
+          </button>
+        </div>
+
+        <div class="farm-fields-grid">
+          <mat-form-field appearance="fill">
+            <mat-label>Nome da Fazenda</mat-label>
+            <input matInput formControlName="name" />
+          </mat-form-field>
+
+          <mat-form-field appearance="fill">
+            <mat-label>Cidade</mat-label>
+            <input matInput formControlName="city" />
+          </mat-form-field>
+
+          <mat-form-field appearance="fill">
+            <mat-label>Estado</mat-label>
+            <input matInput formControlName="state" />
+          </mat-form-field>
+
+          <mat-form-field appearance="fill">
+            <mat-label>Área Total (ha)</mat-label>
+            <input matInput type="number" formControlName="total_area" />
+          </mat-form-field>
+
+          <mat-form-field appearance="fill">
+            <mat-label>Área Agrícola (ha)</mat-label>
+            <input matInput type="number" formControlName="agricultural_area" />
+          </mat-form-field>
+
+          <mat-form-field appearance="fill">
+            <mat-label>Área de Vegetação (ha)</mat-label>
+            <input matInput type="number" formControlName="vegetation_area" />
+          </mat-form-field>
+        </div>
+
+        <div formArrayName="crops" *ngIf="getCrops(i).length > 0">
+          <div *ngFor="let crop of getCrops(i).controls; let j = index" [formGroupName]="j" class="crop-row">
+            <mat-form-field appearance="fill" class="half-width">
+              <mat-label>Nome da Cultura</mat-label>
+              <input matInput formControlName="name" />
+            </mat-form-field>
+
+            <mat-form-field appearance="fill" class="half-width">
+              <mat-label>Safra</mat-label>
+              <input matInput formControlName="season" />
+            </mat-form-field>
+
+            <button mat-icon-button color="warn" (click)="removeCrop(i, j)">
+              <mat-icon>delete</mat-icon>
+            </button>
+          </div>
+        </div>
+
+        <div class="crop-actions">
+          <button mat-stroked-button color="accent" (click)="addCrop(i)">
+            <mat-icon>add</mat-icon> Adicionar Cultura
+          </button>
+        </div>
+
+      </mat-card>
+    </div>
+  </div>
+
+  <div class="farm-actions">
+    <button mat-stroked-button color="primary" (click)="addFarm()">
+      <mat-icon>add</mat-icon> Adicionar Fazenda
+    </button>
+  </div>
+</div>
+
+<div mat-dialog-actions align="end" class="modal-footer">
+  <button mat-stroked-button color="warn" (click)="onClose()">Cancelar</button>
+  <button mat-flat-button color="primary" (click)="onSubmit()">Salvar</button>
+</div>

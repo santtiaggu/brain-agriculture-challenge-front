@@ -1,1 +1,70 @@
-<p>producers works!</p>
+<div class="producers-container">
+  <div class="left-panel">
+    <div class="header">
+      <h2>Produtores</h2>
+      <button class="new-btn" (click)="onNewProducer()">Cadastrar Novo</button>
+    </div>
+
+    <div class="producer-list">
+      <div
+        class="producer-card"
+        *ngFor="let producer of producers"
+        (click)="selectProducer(producer.id)"
+        [class.selected]="producer.id === selectedProducer?.id"
+      >
+        <h4>{{ producer.name }}</h4>
+        <p><strong>Documento:</strong> {{ producer.document }}</p>
+      </div>
+    </div>
+
+    <div class="pagination">
+      <button (click)="prevPage()" [disabled]="page === 1">Anterior</button>
+      <span>Página {{ page }}</span>
+      <button (click)="nextPage()" [disabled]="producers.length < pageSize">Próxima</button>
+    </div>
+  </div>
+
+  <div class="right-panel" *ngIf="selectedProducer">
+    <div class="producer-detail-card">
+      <div class="detail-header">
+        <h2>{{ selectedProducer.name }}</h2>
+        <div class="action-buttons">
+          <button class="edit-btn" (click)="onEditProducer()">Editar</button>
+          <button class="delete-btn" (click)="onDeleteProducer()">Excluir</button>
+        </div>
+      </div>
+
+      <p><strong>Documento:</strong> {{ selectedProducer.document }}</p>
+
+      <div class="farms-section" *ngFor="let farm of selectedProducer.farms">
+        <div class="farm-card">
+          <h3>{{ farm.name }}</h3>
+          <p><strong>Localização:</strong> {{ farm.city }}, {{ farm.state }}</p>
+          <p><strong>Área Total:</strong> {{ farm.total_area }} ha</p>
+          <p><strong>Área Agrícola:</strong> {{ farm.agricultural_area }} ha</p>
+          <p><strong>Área de Vegetação:</strong> {{ farm.vegetation_area }} ha</p>
+
+          <div *ngIf="farm.crops.length > 0">
+            <h4>Culturas</h4>
+            <ul class="crop-list">
+              <li *ngFor="let crop of farm.crops">
+                <span class="crop-name">{{ crop.name }}</span>
+                <span class="crop-season">Safra {{ crop.season }}</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Backdrop -->
+<div class="modal-backdrop" *ngIf="showModal">
+  <app-producer-modal
+    [isEditMode]="isEditing"
+    [initialData]="editingProducer"
+    (close)="showModal = false"
+    (submit)="handleProducerSubmit($event)">
+  </app-producer-modal>
+</div>
