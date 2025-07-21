@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Input, Output, EventEmitter, ViewEncapsulation } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormArray, FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -26,7 +26,8 @@ import { HttpClient, HttpClientModule } from '@angular/common/http';
     HttpClientModule
   ],
   templateUrl: './producer-modal.html',
-  styleUrls: ['./producer-modal.scss']
+  styleUrls: ['./producer-modal.scss'],
+  encapsulation: ViewEncapsulation.None,
 })
 export class ProducerModalComponent {
   @Input() isEditMode = false;
@@ -152,6 +153,22 @@ export class ProducerModalComponent {
       });
       return;
     }
+
+    const invalidAreaFarm = this.farms.controls.find((control) => {
+      const total = Number(control.get('total_area')?.value || 0);
+      const agri = Number(control.get('agricultural_area')?.value || 0);
+      const veg = Number(control.get('vegetation_area')?.value || 0);
+      return agri + veg > total;
+    });
+
+    if (invalidAreaFarm) {
+      this.snackBar.open(
+        'A soma da Área Agrícola e Vegetação não pode ser maior que a Área Total.',
+        'Fechar',
+        { duration: 4000 }
+      );
+      return;
+    } 
 
     if (this.producerForm.valid) {
       const payload = this.producerForm.value;

@@ -2,11 +2,12 @@ import { Component, OnInit } from '@angular/core';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
 import { ProducerModalComponent } from '../components/producer-modal/producer-modal.component';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-producers',
   standalone: true,
-  imports: [CommonModule, HttpClientModule, ProducerModalComponent],
+  imports: [CommonModule, HttpClientModule, ProducerModalComponent, MatSnackBarModule],
   templateUrl: './producers.html',
   styleUrl: './producers.scss'
 })
@@ -21,7 +22,7 @@ export class ProducersComponent implements OnInit {
   isEditing = false;
   editingProducer: any = null;
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private snackBar: MatSnackBar) {}
 
   ngOnInit(): void {
     this.loadProducers();
@@ -69,12 +70,34 @@ export class ProducersComponent implements OnInit {
   }
 
   onDeleteProducer(): void {
-    //
+    if (!this.selectedProducer) return;
+
+    const confirmDelete = confirm(`Deseja realmente excluir o produtor "${this.selectedProducer.name}"?`);
+
+    if (confirmDelete) {
+      const url = `http://localhost:7001/api/producers/${this.selectedProducer.id}`;
+      
+      this.http.delete(url).subscribe({
+        next: () => {
+          this.snackBar.open('Produtor excluído com sucesso!', 'Fechar', { duration: 3000 });
+
+          // Após excluir, atualiza a listagem
+          this.selectedProducer = null;
+          this.loadProducers();
+        },
+        error: (err) => {
+          console.error('Erro ao excluir produtor:', err);
+          this.snackBar.open('Erro ao excluir produtor.', 'Fechar', { duration: 3000 });
+        }
+      });
+    }
   }
 
   handleProducerSubmit(data: any): void {
     console.log(data)
     this.showModal = false;
+    this.editingProducer = null;
+    this.selectedProducer = null;
     this.loadProducers();
   }
 }

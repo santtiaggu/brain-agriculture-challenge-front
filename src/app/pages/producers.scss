@@ -4,11 +4,12 @@
   left: 0;
   width: 100vw;
   height: 100vh;
-  background: rgba(0, 0, 0, 0.4); // fundo escuro
+  background: rgba(0, 0, 0, 0.4);
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 9999;
+  z-index: 999 !important;
+  overflow: visible !important;
 }
 
 app-producer-modal {
@@ -20,6 +21,9 @@ app-producer-modal {
   box-shadow: 0 0 20px rgba(0,0,0,0.3);
   width: 80%;
   max-width: 900px;
+  position: relative;
+  z-index: 999;
+  overscroll-behavior: contain;
 }
 
 
