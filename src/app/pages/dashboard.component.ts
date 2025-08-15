@@ -1,13 +1,13 @@
 import { Component, OnInit } from '@angular/core';
-import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { NgChartsModule } from 'ng2-charts';
 import { ChartData, ChartType } from 'chart.js';
 import { CommonModule } from '@angular/common';
+import { DashboardService } from '../services/dashboard.service';
 
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [CommonModule, HttpClientModule, NgChartsModule],
+  imports: [CommonModule, NgChartsModule],
   templateUrl: './dashboard.html',
   styleUrl: './dashboard.scss'
 })
@@ -21,10 +21,10 @@ export class DashboardComponent implements OnInit {
   documentChart: ChartData<'pie', number[], string> = { labels: [], datasets: [] };
   cropSeasonCharts: { season: string; chart: ChartData<'pie', number[], string> }[] = [];
 
-  constructor(private http: HttpClient) {}
+  constructor(private dashboardService: DashboardService) {}
 
   ngOnInit(): void {
-    this.http.get('http://localhost:7001/api/dashboard').subscribe((data: any) => {
+    this.dashboardService.getDashboardData().subscribe((data: any) => {
       this.dashboardData = data;
       this.totalFarms = data.total_farms;
       this.totalArea = data.total_area;

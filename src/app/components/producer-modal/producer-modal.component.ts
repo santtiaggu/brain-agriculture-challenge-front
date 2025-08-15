@@ -8,7 +8,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatCardModule } from '@angular/material/card';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
-import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { ProducersService } from '../../services/producers.service';
 
 @Component({
   selector: 'app-producer-modal',
@@ -23,7 +23,6 @@ import { HttpClient, HttpClientModule } from '@angular/common/http';
     MatIconModule,
     MatCardModule,
     MatSnackBarModule,
-    HttpClientModule
   ],
   templateUrl: './producer-modal.html',
   styleUrls: ['./producer-modal.scss'],
@@ -37,7 +36,7 @@ export class ProducerModalComponent {
 
   producerForm: FormGroup;
 
-  constructor(private fb: FormBuilder, private http: HttpClient, private snackBar: MatSnackBar) {
+  constructor(private fb: FormBuilder, private producersService: ProducersService, private snackBar: MatSnackBar) {
     this.producerForm = this.fb.group({
       name: ['', Validators.required],
       document: ['', Validators.required],
@@ -172,13 +171,10 @@ export class ProducerModalComponent {
 
     if (this.producerForm.valid) {
       const payload = this.producerForm.value;
-      const url = this.isEditMode
-        ? `http://localhost:7001/api/producers/${this.initialData.id}`
-        : 'http://localhost:7001/api/producers';
-
+      
       const request = this.isEditMode
-        ? this.http.put(url, payload)
-        : this.http.post(url, payload);
+        ? this.producersService.update(this.initialData.id, payload)
+        : this.producersService.create(payload);
 
       request.subscribe({
         next: (response) => {

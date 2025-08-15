@@ -1,13 +1,13 @@
 import { Component, OnInit } from '@angular/core';
-import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
 import { ProducerModalComponent } from '../components/producer-modal/producer-modal.component';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+import { ProducersService } from '../services/producers.service';
 
 @Component({
   selector: 'app-producers',
   standalone: true,
-  imports: [CommonModule, HttpClientModule, ProducerModalComponent, MatSnackBarModule],
+  imports: [CommonModule, ProducerModalComponent, MatSnackBarModule],
   templateUrl: './producers.html',
   styleUrl: './producers.scss'
 })
@@ -22,25 +22,20 @@ export class ProducersComponent implements OnInit {
   isEditing = false;
   editingProducer: any = null;
 
-  constructor(private http: HttpClient, private snackBar: MatSnackBar) {}
+  constructor(private producersService: ProducersService, private snackBar: MatSnackBar) { }
 
   ngOnInit(): void {
     this.loadProducers();
   }
 
   loadProducers(): void {
-    this.http
-      .post<any>('http://localhost:7001/api/producers/list', {
-        page: this.page,
-        size: this.pageSize,
-      })
-      .subscribe((res) => {
-        this.producers = res.producers;
-      });
+    this.producersService.list(this.page, this.pageSize).subscribe((res) => {
+      this.producers = res.producers;
+    });
   }
 
   selectProducer(id: number): void {
-    this.http.get<any>(`http://localhost:7001/api/producers/${id}`).subscribe((res) => {
+    this.producersService.getById(id).subscribe((res) => {
       this.selectedProducer = res;
     });
   }
@@ -75,9 +70,7 @@ export class ProducersComponent implements OnInit {
     const confirmDelete = confirm(`Deseja realmente excluir o produtor "${this.selectedProducer.name}"?`);
 
     if (confirmDelete) {
-      const url = `http://localhost:7001/api/producers/${this.selectedProducer.id}`;
-      
-      this.http.delete(url).subscribe({
+      this.producersService.delete(this.selectedProducer.id).subscribe({
         next: () => {
           this.snackBar.open('Produtor excluído com sucesso!', 'Fechar', { duration: 3000 });
 
