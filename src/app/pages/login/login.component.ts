@@ -41,11 +41,9 @@ export class LoginComponent {
 
   onSubmit() {
     if (this.loginForm.valid) {
-      console.log('Login data:', this.loginForm.value);
       this.authService.login(this.loginForm.value).subscribe({
         next: (response) => {
-          localStorage.setItem('access_token', response.access_token);
-          this.router.navigate(['/dashboard']);
+          if (response) this.router.navigate(['/dashboard']);
         },
         error: (err) => {
           console.log('Erro no Login', err);
