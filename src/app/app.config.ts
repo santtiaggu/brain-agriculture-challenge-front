@@ -1,7 +1,8 @@
-import { ApplicationConfig, provideBrowserGlobalErrorListeners, provideZoneChangeDetection, importProvidersFrom } from '@angular/core';
-import { provideHttpClient } from '@angular/common/http';
+import { ApplicationConfig, provideBrowserGlobalErrorListeners, provideZoneChangeDetection, importProvidersFrom, inject } from '@angular/core';
+import { provideHttpClient, withInterceptors  } from '@angular/common/http';
 import { provideRouter } from '@angular/router';
 import { routes } from './app.routes';
+import { AuthService } from './services/auth.service';
 
 // Angular Material e outros
 import { MatDialogModule } from '@angular/material/dialog';
@@ -17,7 +18,21 @@ export const appConfig: ApplicationConfig = {
   providers: [
     provideBrowserGlobalErrorListeners(),
     provideZoneChangeDetection({ eventCoalescing: true }),
-    provideHttpClient(),
+    // Interceptor com Authorization token
+    provideHttpClient(
+      withInterceptors([
+        (req, next) => {
+          const authService = inject(AuthService);
+          const token = authService.token();
+          if (token) {
+            req = req.clone({
+              setHeaders: { Authorization: `Bearer ${token}` }
+            });
+          }
+          return next(req);
+        }
+      ])
+    ),
     provideRouter(routes),
 
     // Importando módulos necessários para o Angular Material funcionar corretamente
