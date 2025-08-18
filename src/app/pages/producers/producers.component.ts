@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ProducerModalComponent } from '../components/producer-modal/producer-modal.component';
+import { ProducerModalComponent } from '../../components/producer-modal/producer-modal.component';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
-import { ProducersService } from '../services/producers.service';
+import { ProducersService } from '../../services/producers.service';
 
 @Component({
   selector: 'app-producers',

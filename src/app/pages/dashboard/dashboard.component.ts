@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { NgChartsModule } from 'ng2-charts';
 import { ChartData, ChartType } from 'chart.js';
 import { CommonModule } from '@angular/common';
-import { DashboardService } from '../services/dashboard.service';
+import { DashboardService } from '../../services/dashboard.service';
 
 @Component({
   selector: 'app-dashboard',

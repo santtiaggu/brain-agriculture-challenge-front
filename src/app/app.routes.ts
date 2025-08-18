@@ -1,9 +1,11 @@
 import { Routes } from '@angular/router';
 import { MainComponent } from './layout/main/main.component';
-import { DashboardComponent } from './pages/dashboard.component';
-import { ProducersComponent } from './pages/producers.component';
+import { LoginComponent } from './pages/login/login.component';
+import { DashboardComponent } from './pages/dashboard/dashboard.component';
+import { ProducersComponent } from './pages/producers/producers.component';
 
 export const routes: Routes = [
+  { path: 'login', component: LoginComponent },
   {
     path: '',
     component: MainComponent,
@@ -13,4 +15,5 @@ export const routes: Routes = [
       { path: 'producers', component: ProducersComponent },
     ],
   },
+  { path: '**', redirectTo: 'login' } // rota coringa
 ];
