@@ -23,10 +23,10 @@ export const appConfig: ApplicationConfig = {
       withInterceptors([
         (req, next) => {
           const authService = inject(AuthService);
-          const token = authService.token();
-          if (token) {
+          const access_token = authService.access_token();
+          if (access_token) {
             req = req.clone({
-              setHeaders: { Authorization: `Bearer ${token}` }
+              setHeaders: { Authorization: `Bearer ${access_token}` }
             });
           }
           return next(req);
