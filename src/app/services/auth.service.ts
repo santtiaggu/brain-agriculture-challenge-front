@@ -49,8 +49,7 @@ export class AuthService {
             this._user.set(res.user);
 
             // define expiração fixa = 30 min
-            // const FIXED_EXPIRATION = 30 * 60 * 1000;
-            const FIXED_EXPIRATION = 2 * 60 * 1000;
+            const FIXED_EXPIRATION = 30 * 60 * 1000;
             this._expiresAt = Date.now() + FIXED_EXPIRATION;
 
             localStorage.setItem('access_token', res.access_token);
@@ -70,8 +69,7 @@ export class AuthService {
     if (this._expiresAt) {
         const now = Date.now();
         // 5 min antes do token expirar
-        // const refreshIn = this._expiresAt - now - (5 * 60 * 1000)
-        const refreshIn = this._expiresAt - now - (30 * 1000);
+        const refreshIn = this._expiresAt - now - (5 * 60 * 1000)
 
         if (refreshIn > 0) {
             this.refreshSub = timer(refreshIn).subscribe(() => {
@@ -93,8 +91,7 @@ export class AuthService {
         this._refresh_token = res.refresh_token;
 
         // reinicia expiração fixa de 30 min
-        // const FIXED_EXPIRATION = 30 * 60 * 1000;
-        const FIXED_EXPIRATION = 2 * 60 * 1000;
+        const FIXED_EXPIRATION = 30 * 60 * 1000;
         this._expiresAt = Date.now() + FIXED_EXPIRATION;
 
         localStorage.setItem('access_token', res.access_token);
